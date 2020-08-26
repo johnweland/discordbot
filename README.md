@@ -15,9 +15,9 @@ npm run dev
 1. [Open the following link](https://discordapp.com/developers/applications/) to Discord's developer portal.
 2. Create a new Application.
 3. Give your application a name and image.
-![Heroku](/docs/img/discord01.png)
+![Discord](/docs/img/discord01.png)
 4. Under the Bot tab, click 'Add Bot'.
-![Heroku](/docs/img/discord02.png)
+![Discord](/docs/img/discord02.png)
 5. Copy your Client ID and Secret to another location.
 6. Invite your bot to a server using the following link: https://discordapp.com/oauth2/authorize?&client_id=YOUR_CLIENT_ID_HERE&scope=bot
 *Replace YOUR_CLIENT_ID_HERE with your Client ID*
