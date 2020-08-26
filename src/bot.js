@@ -1,34 +1,28 @@
 require('dotenv').config();
-const config = require('./config.json');
-const command = require('./command');
+const path = require('path');
+const fs = require('fs');
 
 const { Client } = require('discord.js');
 
 const client = new Client();
 client.on('ready', () => {
     console.log(`${client.user.tag} is ${client.user.presence.status} in ${client.guilds.cache.size} server(s).`);
+    const baseFile = 'command-base.js';
+    const commandBase = require(`./commands/${baseFile}`);
 
-    command(client, 'ping', message => {
-        message.channel.send("Pong!");
-    });
-
-    command(client, ['servers', 'listservers'], message => {
-        client.guilds.cache.forEach((guild) => {
-            message.channel.send(`${guild.name} has a total of ${guild.memberCount} members.`);
-        });
-    });
-
-    command(client, ['cc', 'clearchannel'], message => {
-        if (message.member.hasPermission('ADMINISTRATOR')) {
-            message.channel.messages.fetch()
-            .then(results => {
-                results = results.filter(result => !result.pinned);
-                message.channel.bulkDelete(results);
-            })
-            .catch(err => console.error(err));
-        } else {
-            message.channel.send(`${message.member}, you do not have permission to execute this command.`);
+    const readCommands = dir => {
+        const files = fs.readdirSync(path.join(__dirname, dir));
+        for (const file of files) {
+            const stat = fs.lstatSync(path.join(__dirname, dir, file));
+            if (stat.isDirectory()) {
+                readCommands(path.join(dir, file));
+            } else if (file !== baseFile) {
+                const option = require(path.join(__dirname, dir, file));
+                commandBase(client, option);
+            }
         }
-    })
+    }
+
+    readCommands('commands');
 });
 client.login(process.env.DISCORD_BOT_TOKEN);
