@@ -9,7 +9,8 @@ module.exports = (client, aliases, callback) => {
         aliases.forEach(alias => {
             const command = `${prefix}${alias}`;
             if (content.startsWith(`${command}`) || content === command ) {
-                console.log(`Running the command ${command}`);
+                let date = new Date(Date.now());
+                console.log(`${date.toDateString()}: Running the command ${command}, as requested by ${message.member.user.tag}.`);
                 callback(message);
             }
         });
