@@ -15,6 +15,8 @@ client.on('ready', async () => {
         .then(mongoose => {
             try {
                 console.log("Connected to Mongo Atlas");
+            } catch (err) {
+                throw new Error(err);
             } finally {
                 mongoose.connection.close();
             }
