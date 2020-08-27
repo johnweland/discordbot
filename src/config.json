@@ -1,3 +1,4 @@
 {
-    "prefix": "!"
+    "prefix": "!",
+    "mongoPath": "mongodb+srv://api-user:6Bs18ezRFgLuD8uZ@jdngr-iyvir.gcp.mongodb.net/shoptitans?retryWrites=true&w=majority"
 }

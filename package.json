@@ -4,9 +4,9 @@
   "description": "A DiscordJS bot designed for Shop Titans",
   "main": "index.js",
   "scripts": {
-    "test":  "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./src/bot.js",
-    "dev":   "nodemon ./src/bot.js"
+    "dev": "nodemon ./src/bot.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   "homepage": "https://github.com/johnweland/discordbot#readme",
   "dependencies": {
     "discord.js": "^12.3.1",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "mongoose": "^5.10.1"
   }
 }
