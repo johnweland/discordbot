@@ -99,7 +99,6 @@ module.exports = (client, options) => {
                 
                 // Handle the command
                 callback(message, arguments, arguments.join(' '));
-
                 return;
             }
         }
