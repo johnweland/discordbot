@@ -15,6 +15,7 @@ module.exports = (client) => {
                 readCommands(path.join(dir, file));
             } else if (file !== baseFile && file !== 'load-commands.js') {
                 const option = require(path.join(__dirname, dir, file));
+                console.log(`Registering command ${file}`);
                 commands.push(option)
                 if(client) {
                     commandBase(client, option);

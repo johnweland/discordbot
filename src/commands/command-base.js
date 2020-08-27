@@ -1,4 +1,4 @@
-const { prefix } = require('../config.json');
+const { prefix } = require('@root/config.json');
 
 const validatePermissions = (permissions) => {
     const validPermissions = [
@@ -56,7 +56,6 @@ module.exports = (client, options) => {
     if (typeof commands === 'string') {
         commands = [commands];
     }
-    console.log(`Registering command "${commands[0]}".`);
 
     if (permissions.length) {
         if (typeof permissions === 'string') {

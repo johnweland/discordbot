@@ -22,6 +22,14 @@
   "dependencies": {
     "discord.js": "^12.3.1",
     "dotenv": "^8.2.0",
+    "module-alias": "^2.2.2",
     "mongoose": "^5.10.1"
+  },
+  "_moduleAliases": {
+    "@root": "./src",
+    "@schemas": "./src/schemas",
+    "@utilities": "./src/utilities",
+    "@features": "./src/features/features",
+    "@commands": "./src/commands/commands"
   }
 }
