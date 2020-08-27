@@ -2,10 +2,10 @@ const economy = require('../../economy');
 
 module.exports = {
     commands: ['add-balance', 'addbal'],
-    description: 'Checks the balance of a user',
+    description: 'Adds to the balance of the target user.',
     minArgs: 2,
     maxArgs: 2,
-    expectedArgs: '<user>, <amount>',
+    expectedArgs: '<user> <amount>',
     permissionError: 'you do not have permission to execute this command.',
     callback: async (message, arguments) => {
         const target = message.mentions.users.first();
@@ -14,6 +14,13 @@ module.exports = {
             return;
         }
         const amount = arguments[1];
+        if (amount === 'max') {
+            amount = 999;
+        }
+        if (amount > 999) {
+            message.reply('To prevent money over-inflation, a cap of 999 coins has been implemented');
+            return;
+        }
         if (!amount || isNaN(amount)) {
             message.reply('You must specify an amount.');
             return;

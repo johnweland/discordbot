@@ -5,6 +5,7 @@ const { Client } = require('discord.js');
 const { clear } = require('console');
 const mongo = require('./mongo');
 const loadCommands = require('./commands/load-commands');
+const levels = require('./levels');
 
 
 const client = new Client();
@@ -21,5 +22,6 @@ client.on('ready', async () => {
         })
         .catch(err => console.error(err));
     loadCommands(client);
+    levels(client);
 });
 client.login(process.env.DISCORD_BOT_TOKEN);

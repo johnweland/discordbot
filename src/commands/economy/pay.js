@@ -5,7 +5,7 @@ module.exports = {
     description: 'Transfers X coins from the command user to a target user.',
     minArgs: 2,
     maxArgs: 2,
-    expectedArgs: '<user>, <amount>',
+    expectedArgs: '<user> <amount>',
     callback: async (message, arguments) => {
         const { guild, member } = message;
         const target = message.mentions.users.first();
@@ -14,7 +14,7 @@ module.exports = {
             return;
         }
         const amount = arguments[1];
-        if (!amount || isNaN(amount)) {
+        if (!amount || isNaN(amount) || amount < 0) {
             message.reply('You must specify an amount.');
             return;
         }
@@ -26,7 +26,7 @@ module.exports = {
             return;
         }
 
-        const payeeBalance = await economy.addCoins(
+        const payerBalance = await economy.addCoins(
             guild.id,
             member.id,
             amount * -1
@@ -38,7 +38,7 @@ module.exports = {
             amount
         )
 
-        message.reply(`You have given ${target} ${amount} coins! They now have ${targetBalance} coins and you have ${payeeBalance} coins.`);
+        message.reply(`You have given ${target} ${amount} coins! They now have ${targetBalance} coins and you have ${payerBalance} coins.`);
         
     }
 }
