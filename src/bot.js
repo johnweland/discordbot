@@ -14,7 +14,7 @@ client.on('ready', async () => {
     await mongo()
         .then(mongoose => {
             try {
-                console.log("Connected to Mongo Atlas");
+                return console.log("Connected to Mongo Atlas");
             } catch (err) {
                 throw new Error(err);
             } finally {
@@ -24,6 +24,5 @@ client.on('ready', async () => {
         .catch(err => console.error(err));
     loadCommands(client);
     loadFeatures(client);
-    levels(client);
 });
 client.login(process.env.DISCORD_BOT_TOKEN);

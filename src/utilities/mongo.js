@@ -3,10 +3,13 @@ const { mongoPath } = require('@root/config.json');
 
 
 module.exports = async () => {
-    await mongoose.connect(mongoPath, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false
-    });
-    return mongoose;
+    try{
+        return await mongoose.connect(mongoPath, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            useFindAndModify: false
+        });
+    } catch (err) {
+        throw new Error(err);
+    }
 }

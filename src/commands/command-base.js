@@ -36,7 +36,7 @@ const validatePermissions = (permissions) => {
     ]
     for (const permission of permissions) {
         if (!validPermissions.includes(permission)) {
-            throw new Error(`Unknown permission node "${permission}"`);
+            console.error(`Unknown permission node "${permission}"`);
         }
     }
 }
