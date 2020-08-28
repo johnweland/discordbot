@@ -10,11 +10,11 @@ module.exports.addCoins = async (guildId, userId, coins) => {
         .then(async mongoose => {
             try {
                 const result = await profileSchema.findOneAndUpdate({
-                    _id: userId,
+                    userId,
                     guildId
                 }, 
                 {
-                    _id: userId,
+                    userId,
                     guildId,
                     $inc: {
                         coins
@@ -26,6 +26,8 @@ module.exports.addCoins = async (guildId, userId, coins) => {
                 });
                 coinsCache[`${guildId}-${userId}`] = result.coins;
                 return result.coins;
+            } catch (err) {
+                throw new Error(err);
             } finally {
                 mongoose.connection.close();
             }
@@ -39,28 +41,29 @@ module.exports.getCoins = async (guildId, userId) => {
     if (cachedValue) {
         return cachedValue;
     }
-    return await mongo()
-        .then(async mongoose => {
-            try {
-                const result = await profileSchema.findOne({
-                    _id: userId,
-                    guildId
-                });
-                let coins = 0;
-                if (result) {
-                    coins = result.coins;
-                } else {
-                    await new profileSchema({
-                        _id: userId,
-                        guildId,
-                        coins
-                    }).save();
-                }
-                coinsCache[`${guildId}-${userId}`] = coins;
-                return coins;
-            } finally {
-                mongoose.connection.close();
+    return await mongo().then(async mongoose => {
+        try {
+            const result = await profileSchema.findOne({
+                userId,
+                guildId
+            });
+            let coins = 0;
+            if (result) {
+                coins = result.coins;
+            } else {
+                await new profileSchema({
+                    userId,
+                    guildId,
+                    coins
+                }).save();
             }
-        })
-        .catch(err => console.error(err));
+            coinsCache[`${guildId}-${userId}`] = coins;
+            return coins;
+        } catch (err) {
+            throw new Error(err);
+        } finally {
+            mongoose.connection.close();
+        }
+    })
+    .catch(err => console.error(err));
 }
