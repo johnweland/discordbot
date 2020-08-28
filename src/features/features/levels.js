@@ -1,6 +1,8 @@
 const mongo = require('@utilities/mongo');
 const profileSchema = require('@schemas/profile-schema');
 
+const levelsCache = {};
+
 module.exports = (client) => {
   client.on('message', (message) => {
     const { guild, member } = message
@@ -61,3 +63,37 @@ const addXP = async (guildId, userId, xpToAdd, message) => {
 }
 
 module.exports.addXP = addXP;
+
+const getLevel = async (guildId, userId) => {
+  const cachedValue = levelsCache[`${guildId}-${userId}`];
+    if (cachedValue) {
+        return cachedValue;
+    }
+    return await mongo()
+        .then(async mongoose => {
+            try {
+                const result = await profileSchema.findOne({
+                    _id: userId,
+                    guildId
+                });
+                let level = 1;
+                if (result) {
+                  level = result.level;
+                } else {
+                    await new profileSchema({
+                        _id: userId,
+                        guildId,
+                        level
+                    }).save();
+                }
+                levelsCache[`${guildId}-${userId}`] = level;
+                return level;
+            } finally {
+                mongoose.connection.close();
+            }
+        })
+        .catch(err => console.error(err));
+
+}
+
+module.exports.getLevel = getLevel;
