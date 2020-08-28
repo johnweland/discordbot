@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports = {
-    commands: ['server-info', 'serverinfo', 'server'],
+    commands: ['serverinfo', 'server'],
     description: "Gets basic information about the server.",
     minArgs: 0,
     callback: (message, arguments, text) => {
