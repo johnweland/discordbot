@@ -4,7 +4,7 @@ module.exports = {
     commands: ['balance', 'bal'],
     description: 'Checks the balance of a user.',
     maxArgs: 1,
-    expectedArgs: '[Target user\'s @]',
+    expectedArgs: '[User]',
     callback: async (message) => {
         const target = message.mentions.users.first() || message.author;
         const guildId = message.guild.id;
