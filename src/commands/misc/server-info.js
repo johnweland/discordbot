@@ -1,10 +1,17 @@
-const Discord = require("discord.js");
+const { MessageEmbed } = require('discord.js');
+const Commando = require('discord.js-commando');
 
-module.exports = {
-    commands: ['serverinfo', 'server'],
-    description: "Gets basic information about the server.",
-    minArgs: 0,
-    callback: (message, arguments, text) => {
+module.exports = class UserInfoCommand extends Commando.Command {
+    constructor(client) {
+        super(client, {
+            name: 'serverinfo',
+            group: 'misc',
+            memberName: 'serverinfo',
+            description: 'Displays information about the server',
+        });
+    }
+
+    run = async (message) => {
         const { guild } = message;
         const { name, region, memberCount, owner, afkTimeout} = guild;
         const icon = guild.iconURL();
@@ -12,7 +19,7 @@ module.exports = {
 
         const embed = new Discord.MessageEmbed()
             .setTitle(`Server Info for ${name}`)
-            .setImage(guild.iconURL())
+            .setImage(icon)
             .addFields(
                 {
                     name: 'Region',
@@ -32,5 +39,5 @@ module.exports = {
             .setFooter(`Server Owner: ${owner.user.tag}`, ownerAvatar)
             .setColor('#ed7f11');
         message.channel.send(embed);
-    }
+    };
 }
