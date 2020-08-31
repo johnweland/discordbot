@@ -3,7 +3,7 @@ const levels = require('@features/levels');
 const { createCanvas, loadImage } = require('canvas');
 const { MessageAttachment } = require('discord.js');
 
-module.exports = class DailyCommand extends Commando.Command {
+module.exports = class GetLevelCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'getlevel',
@@ -18,6 +18,7 @@ module.exports = class DailyCommand extends Commando.Command {
         const guildId = message.guild.id;
         const userId = target.id;
         const result = await levels.getLevel(guildId, userId);
+        console.log('level data: ', result);
         const attachment = await createRankCard(target, result);
         message.channel.send(`Level info for ${target}`, attachment);
     };

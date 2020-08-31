@@ -6,7 +6,7 @@ module.exports = (client) => {
     client.on('message', (message) => {
         if (message.author.bot) return;
         if (message.author.id === client.user.id) return;
-        if(message.guild === null) return;
+        if (message.guild === null) return;
         const { guild, member } = message;
         addXP(guild.id, member.id, 23, message);
     });
@@ -71,16 +71,18 @@ module.exports.addXP = addXP;
 const getLevel = async (guildId, userId) => {
     const cachedValue = levelsCache[`${guildId}-${userId}`];
     if (cachedValue) {
+        console.log('cached result: ', cachedValue);
         return cachedValue;
     }
-    return await mongo()
+    await mongo()
         .then(async mongoose => {
             try {
-                const result = await profileSchema.findOne({
+                let result = await profileSchema.findOne({
                     guildId,
                     userId
                 });
                 let level = 1;
+                let xp = 0;
                 if (result) {
                     level = result.level;
                     xp = result.xp;
@@ -90,13 +92,18 @@ const getLevel = async (guildId, userId) => {
                         userId,
                         level
                     }).save();
+                    result = await profileSchema.findOne({
+                        guildId,
+                        userId
+                    });
                 }
-                levelsCache[`${guildId}-${userId}`] = level;
-                return {
-                    level: level,
-                    xp: xp,
-                    needed: getNeededXP(level)
-                }
+                levelsCache[`${guildId}-${userId}`] = {
+                    level: result.level,
+                    xp: result.xp,
+                    needed: getNeededXP(result.level)
+                };
+                console.log('data: ', levelsCache[`${guildId}-${userId}`]);
+                return result;
             } catch (err) {
                 throw new Error(err);
             } finally {

@@ -1,5 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const Commando = require('discord.js-commando');
+const levels = require('@features/levels');
 
 module.exports = class UserInfoCommand extends Commando.Command {
     constructor(client) {
@@ -16,6 +17,13 @@ module.exports = class UserInfoCommand extends Commando.Command {
 
         const user = message.mentions.users.first() || message.member.user;
         const member = guild.members.cache.get(user.id);
+        const guildId = guild.id;
+        const userId = user.id;
+        let { level } = await levels.getLevel(guildId, userId);
+        let roles = member.roles.cache;
+        level = typeof level === 'undefined' ? 0 : level;
+        
+        roles = roles.filter(role => role.name !== '@everyone');
 
         const embed = new MessageEmbed()
             .setAuthor(`User info for ${user.username}`, user.displayAvatarURL())
@@ -26,13 +34,18 @@ module.exports = class UserInfoCommand extends Commando.Command {
                     inline: true
                 },
                 {
+                    name: '\u200b',
+                    value: '\u200b',
+                    inline: true
+                },
+                {
                     name: 'Nickname',
                     value: member.nickname || 'None',
                     inline: true
                 },
                 {
-                    name: 'Is bot',
-                    value: user.bot,
+                    name: 'Level',
+                    value:  level,
                 },
                 {
                     name: 'Joined Server',
@@ -40,16 +53,22 @@ module.exports = class UserInfoCommand extends Commando.Command {
                     inline: true
                 },
                 {
-                    name: 'Joined Discord',
-                    value: new Date(user.createdTimestamp).toLocaleDateString(),
+                    name: '\u200b',
+                    value: '\u200b',
                     inline: true
                 },
                 {
+                    name: 'Joined Discord',
+                    value: new Date(user.createdTimestamp).toLocaleDateString(),
+                    inline: true
+                },                
+                {
                     name: 'Roles',
-                    value: member.roles.cache.size - 1,
+                    value: roles.map(r => `${r}`).join(',  '),
+                    inline: true
                 }
             )
 
-        channel.send(embed)
+        channel.send(embed);
     };
 }
