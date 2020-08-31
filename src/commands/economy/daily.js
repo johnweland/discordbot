@@ -18,7 +18,7 @@ module.exports = class DailyCommand extends Commando.Command {
             name: 'daily',
             group: 'economy',
             memberName: 'daily',
-            description: '**Coming Soon** Claims daily rewards',
+            description: '_Coming Soon_ Claims daily rewards',
         });
     }
 

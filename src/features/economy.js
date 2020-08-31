@@ -43,6 +43,7 @@ module.exports.getCoins = async (guildId, userId) => {
     }
 
     return await mongo().then(async (mongoose) => {
+    
         try {
             const result = await profileSchema.findOne({
                 guildId,

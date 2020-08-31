@@ -81,6 +81,7 @@ const getLevel = async (guildId, userId) => {
                     userId
                 });
                 let level = 1;
+                let xp = 0;
                 if (result) {
                     level = result.level;
                     xp = result.xp;
@@ -91,12 +92,12 @@ const getLevel = async (guildId, userId) => {
                         level
                     }).save();
                 }
-                levelsCache[`${guildId}-${userId}`] = level;
-                return {
+                levelsCache[`${guildId}-${userId}`] = {
                     level: level,
                     xp: xp,
                     needed: getNeededXP(level)
-                }
+                };
+                return levelsCache[`${guildId}-${userId}`];
             } catch (err) {
                 throw new Error(err);
             } finally {

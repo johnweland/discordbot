@@ -3,7 +3,7 @@ const levels = require('@features/levels');
 const { createCanvas, loadImage } = require('canvas');
 const { MessageAttachment } = require('discord.js');
 
-module.exports = class DailyCommand extends Commando.Command {
+module.exports = class GetLevelCommand extends Commando.Command {
     constructor(client) {
         super(client, {
             name: 'getlevel',
