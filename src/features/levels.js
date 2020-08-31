@@ -6,7 +6,7 @@ module.exports = (client) => {
     client.on('message', (message) => {
         if (message.author.bot) return;
         if (message.author.id === client.user.id) return;
-        if (message.guild === null) return;
+        if(message.guild === null) return;
         const { guild, member } = message;
         addXP(guild.id, member.id, 23, message);
     });
@@ -71,13 +71,12 @@ module.exports.addXP = addXP;
 const getLevel = async (guildId, userId) => {
     const cachedValue = levelsCache[`${guildId}-${userId}`];
     if (cachedValue) {
-        console.log('cached result: ', cachedValue);
         return cachedValue;
     }
-    await mongo()
+    return await mongo()
         .then(async mongoose => {
             try {
-                let result = await profileSchema.findOne({
+                const result = await profileSchema.findOne({
                     guildId,
                     userId
                 });
@@ -92,18 +91,13 @@ const getLevel = async (guildId, userId) => {
                         userId,
                         level
                     }).save();
-                    result = await profileSchema.findOne({
-                        guildId,
-                        userId
-                    });
                 }
                 levelsCache[`${guildId}-${userId}`] = {
-                    level: result.level,
-                    xp: result.xp,
-                    needed: getNeededXP(result.level)
+                    level: level,
+                    xp: xp,
+                    needed: getNeededXP(level)
                 };
-                console.log('data: ', levelsCache[`${guildId}-${userId}`]);
-                return result;
+                return levelsCache[`${guildId}-${userId}`];
             } catch (err) {
                 throw new Error(err);
             } finally {

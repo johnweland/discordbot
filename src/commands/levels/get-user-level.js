@@ -18,7 +18,6 @@ module.exports = class GetLevelCommand extends Commando.Command {
         const guildId = message.guild.id;
         const userId = target.id;
         const result = await levels.getLevel(guildId, userId);
-        console.log('level data: ', result);
         const attachment = await createRankCard(target, result);
         message.channel.send(`Level info for ${target}`, attachment);
     };

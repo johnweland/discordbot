@@ -1,6 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const Commando = require('discord.js-commando');
 const levels = require('@features/levels');
+const economy = require('@features/economy');
 
 module.exports = class UserInfoCommand extends Commando.Command {
     constructor(client) {
@@ -19,9 +20,10 @@ module.exports = class UserInfoCommand extends Commando.Command {
         const member = guild.members.cache.get(user.id);
         const guildId = guild.id;
         const userId = user.id;
-        let { level } = await levels.getLevel(guildId, userId);
+        let { level, xp } = await levels.getLevel(guildId, userId);
+        let balance = await economy.getCoins(guildId, userId);
         let roles = member.roles.cache;
-        level = typeof level === 'undefined' ? 0 : level;
+        level = typeof level === 'undefined' ? 1 : level;
         
         roles = roles.filter(role => role.name !== '@everyone');
 
@@ -46,6 +48,17 @@ module.exports = class UserInfoCommand extends Commando.Command {
                 {
                     name: 'Level',
                     value:  level,
+                    inline: true
+                },
+                {
+                    name: 'XP',
+                    value:  xp,
+                    inline: true
+                },
+                {
+                    name: 'Coins',
+                    value:  balance,
+                    inline: true
                 },
                 {
                     name: 'Joined Server',
