@@ -1,19 +1,25 @@
+const Commando = require('discord.js-commando');
+const mongo = require('@utilities/mongo');
 const economy = require('@features/economy');
 
-module.exports = {
-    commands: ['add-balance', 'addbal'],
-    description: 'Adds to the balance of the target user.',
-    minArgs: 2,
-    maxArgs: 2,
-    expectedArgs: '<user> <amount>',
-    permissionError: 'you do not have permission to execute this command.',
-    callback: async (message, arguments) => {
+module.exports = class AddBalanaceCommand extends Commando.Command {
+    constructor(client) {
+        super(client, {
+            name: 'addbalance',
+            group: 'economy',
+            memberName: 'addbalance',
+            description: 'Add\'s a number of coins to a user\'s balance.',
+            argsType: 'multiple'
+        });
+    }
+
+    async run(message, args) {
         const target = message.mentions.users.first();
         if (!target) {
             message.reply('Please tag a user to add coins to.');
             return;
         }
-        const amount = arguments[1];
+        const amount = args[1];
         if (amount === 'max') {
             amount = 999;
         }
@@ -32,7 +38,5 @@ module.exports = {
         const coins = await economy.addCoins(guildId, userId, amount);
 
         message.channel.send(`You've given ${target} ${amount} coin(s). They now have a balance of ${coins} coins!`);
-        
-    },
-    permissions: ['ADMINISTRATOR'],
+    };
 }
