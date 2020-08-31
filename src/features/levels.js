@@ -6,6 +6,7 @@ module.exports = (client) => {
     client.on('message', (message) => {
         if (message.author.bot) return;
         if (message.author.id === client.user.id) return;
+        if(message.guild === null) return;
         const { guild, member } = message;
         addXP(guild.id, member.id, 23, message);
     });
