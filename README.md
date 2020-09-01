@@ -1,6 +1,6 @@
 # DiscordBot
 
-Yet another DiscordJS bot, this one designed for the mobile game [Shop Titans](https://playshoptitans.com/) by [Kabam](https://kabam.com/)
+Yet another DiscordJS bot using the Commando Framework.
 
 ## How to use
 
