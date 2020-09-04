@@ -1,8 +1,8 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
-const { mongo_uri } = require('@root/config.json');
 
 module.exports = async () => {
-    await mongoose.connect(mongo_uri, {
+    await mongoose.connect(process.env.MONGO_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useFindAndModify: false
