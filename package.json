@@ -8,9 +8,13 @@
     "start": "node ./src/index.js",
     "dev": "nodemon ./src/index.js"
   },
-  "keywords": [],
+  "keywords": ["bot", "discord.js", "discord.js-command"],
   "author": "John Weland",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/johnweland/discordbot"
+  },
   "bugs": {
     "url": "https://github.com/johnweland/discordbot/issues"
   },
