@@ -1,3 +1,4 @@
+require('dotenv').config();
 require('module-alias/register');
 const path = require('path');
 const { MongoClient } = require('mongodb');
@@ -5,16 +6,16 @@ const MongoDBProvider = require('commando-mongodb');
 
 const Commando = require('discord.js-commando');
 
-const config = require('@root/config.json');
 const loadFeatures = require('@utilities/load-features');
 
 const client = new Commando.CommandoClient({
-    owner: config.owner,
-    prefix: config.prefix
+    owner: process.env.OWNER,
+    prefix: process.env.PREFIX
 });
 client.setProvider(
-    MongoClient.connect(config.mongo_uri, {
-        useUnifiedTopology: true
+    MongoClient.connect(process.env.MONGO_URI, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true
     })
         .then(client => {
             return new MongoDBProvider(client, 'discordbot');
@@ -37,4 +38,4 @@ client.on('ready', async () => {
     loadFeatures(client);
 });
 
-client.login(config.discord_token);
+client.login(process.env.DISCORD_TOKEN);
