@@ -15,54 +15,48 @@ module.exports = (client) => {
 const getNeededXP = (level) => level * level * 100;
 
 const addXP = async (guildId, userId, xpToAdd, message) => {
-    await mongo().then(async (mongoose) => {
-        try {
-            const result = await profileSchema.findOneAndUpdate(
-                {
-                    guildId,
-                    userId,
-                },
-                {
-                    guildId,
-                    userId,
-                    $inc: {
-                        xp: xpToAdd,
-                    },
-                },
-                {
-                    upsert: true,
-                    new: true,
-                }
-            );
-
-            let { xp, level } = result;
-            const needed = getNeededXP(level);
-
-            if (xp >= needed) {
-                ++level;
-                xp -= needed;
-
-                message.reply(
-                    `You are now level ${level} with ${xp} experience! You now need ${getNeededXP(
-                        level
-                    )} XP to level up again.`
-                );
-
-                await profileSchema.updateOne(
-                    {
-                        guildId,
-                        userId,
-                    },
-                    {
-                        level,
-                        xp,
-                    }
-                );
-            }
-        } finally {
-            mongoose.connection.close();
+    const result = await profileSchema.findOneAndUpdate(
+        {
+            guildId,
+            userId,
+        },
+        {
+            guildId,
+            userId,
+            $inc: {
+                xp: xpToAdd,
+            },
+        },
+        {
+            upsert: true,
+            new: true,
         }
-    });
+    );
+
+    let { xp, level } = result;
+    const needed = getNeededXP(level);
+
+    if (xp >= needed) {
+        ++level;
+        xp -= needed;
+
+        message.reply(
+            `You are now level ${level} with ${xp} experience! You now need ${getNeededXP(
+                level
+            )} XP to level up again.`
+        );
+
+        await profileSchema.updateOne(
+            {
+                guildId,
+                userId,
+            },
+            {
+                level,
+                xp,
+            }
+        );
+    }
 }
 
 module.exports.addXP = addXP;
@@ -73,38 +67,28 @@ const getLevel = async (guildId, userId) => {
     if (cachedValue) {
         return cachedValue;
     }
-    return await mongo()
-        .then(async mongoose => {
-            try {
-                const result = await profileSchema.findOne({
-                    guildId,
-                    userId
-                });
-                let level = 1;
-                let xp = 0;
-                if (result) {
-                    level = result.level;
-                    xp = result.xp;
-                } else {
-                    await new profileSchema({
-                        guildId,
-                        userId,
-                        level
-                    }).save();
-                }
-                levelsCache[`${guildId}-${userId}`] = {
-                    level: level,
-                    xp: xp,
-                    needed: getNeededXP(level)
-                };
-                return levelsCache[`${guildId}-${userId}`];
-            } catch (err) {
-                throw new Error(err);
-            } finally {
-                mongoose.connection.close();
-            }
-        })
-        .catch(err => console.error(err));
+    const result = await profileSchema.findOne({
+        guildId,
+        userId
+    });
+    let level = 1;
+    let xp = 0;
+    if (result) {
+        level = result.level;
+        xp = result.xp;
+    } else {
+        await new profileSchema({
+            guildId,
+            userId,
+            level
+        }).save();
+    }
+    levelsCache[`${guildId}-${userId}`] = {
+        level: level,
+        xp: xp,
+        needed: getNeededXP(level)
+    };
+    return levelsCache[`${guildId}-${userId}`];
 }
 
 module.exports.getLevel = getLevel;

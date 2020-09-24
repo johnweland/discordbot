@@ -1,5 +1,4 @@
 const Commando = require('discord.js-commando');
-const mongo = require('@utilities/mongo');
 const economy = require('@features/economy');
 
 module.exports = class GetBalanceCommand extends Commando.Command {
