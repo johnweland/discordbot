@@ -3,6 +3,7 @@ require('module-alias/register');
 const path = require('path');
 const { MongoClient } = require('mongodb');
 const MongoDBProvider = require('commando-mongodb');
+const mongo = require("@utilities/mongo");
 
 const Commando = require('discord.js-commando');
 
@@ -25,6 +26,8 @@ client.setProvider(
 
 client.on('ready', async () => {
     console.log(`${client.user.tag}, online`);
+
+    await mongo();
     client.registry
         .registerGroups([
             ['economy', 'Server Economy'],
