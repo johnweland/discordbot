@@ -17,15 +17,13 @@ client.setProvider(
     MongoClient.connect(process.env.MONGO_URI, {
         useUnifiedTopology: true,
         useNewUrlParser: true
-    })
-        .then(client => {
-            return new MongoDBProvider(client, 'discordbot');
-        })
-        .catch(err => console.error(err))
+    }).then(client => {
+        return new MongoDBProvider(client, 'discordbot');
+    }).catch(err => console.error(err))
 );
 
 client.on('ready', async () => {
-    console.log(`${client.user.tag}, online`);
+    console.info(`${client.user.tag}, online`);
 
     await mongo();
     client.registry

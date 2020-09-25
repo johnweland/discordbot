@@ -1,5 +1,4 @@
 const Commando = require('discord.js-commando');
-const mongo = require('@utilities/mongo');
 const dailyRewardsSchema = require('@schemas/daily-rewards-schema');
 
 let claimedCache = [];
